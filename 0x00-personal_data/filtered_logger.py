@@ -25,3 +25,22 @@ def filter_datum(fields: List,
     """filters PII on key fields using regex"""
     pattern = fr"({'|'.join(fields)})=[^{separator}]+"
     return re.sub(pattern, fr"\1={redaction}", message)
+
+
+import logging
+
+
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class
+        """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: str):
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+        self.fields = fields
+
+    def format(self, record: logging.LogRecord) -> str:
+        NotImplementedError

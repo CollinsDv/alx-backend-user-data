@@ -7,8 +7,6 @@ which is a byte string.
 Use the bcrypt package to perform the hashing (with hashpw).
 """
 import bcrypt
-import base64
-import hashlib
 
 
 def hash_password(password: str) -> bytes:
@@ -20,6 +18,13 @@ def hash_password(password: str) -> bytes:
         hashed password in bytes
     """
     return bcrypt.hashpw(
-            base64.b64encode(hashlib.sha256(password.encode()).digest()),
+            password.encode(),
             bcrypt.gensalt()
             )
+
+
+def is_valid(hashed_password: bytes, password: str) -> bool:
+    """
+    check if password is valid
+    """
+    return bcrypt.checkpw(password.encode(), hashed_password)
