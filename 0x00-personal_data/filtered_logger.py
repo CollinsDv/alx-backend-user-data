@@ -22,14 +22,6 @@ def filter_datum(fields: List,
                  redaction: str,
                  message: str,
                  separator: str) -> List:
-    """filters PII on ley fields using regex
-    Args:
-        fields (list) -> sensitive keys of data
-        redaction (str)-> field to obfuscate with
-        message (str) -> text to examine
-        separator (str) ->  separating delimeter
-    Returns
-        list of sanitised entries
-    """
+    """filters PII on key fields using regex"""
     pattern = fr"({'|'.join(fields)})=[^{separator}]+"
     return re.sub(pattern, fr"\1={redaction}", message)
