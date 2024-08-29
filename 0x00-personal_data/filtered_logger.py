@@ -18,7 +18,10 @@ import re
 from typing import List
 
 
-def filter_datum(fields: List, redaction: str, message: str, separator: str):
+def filter_datum(fields: List,
+                 redaction: str,
+                 message: str,
+                 separator: str) -> List:
     """filters PII on ley fields using regex
     Args:
         fields (list) -> sensitive keys of data
@@ -28,10 +31,5 @@ def filter_datum(fields: List, redaction: str, message: str, separator: str):
     Returns
         list of sanitised entries
     """
-    pattern = '|'.join(
-            [f'{field}=[^{separator}]*'
-                for field in fields])
-    return re.sub(
-            pattern,
-            lambda m: f"{m.group(0).split('=')[0]}={redaction}",
-            message)
+    pattern = fr"({'|'.join(fields)})=[^{separator}]+"
+    return re.sub(pattern, fr"\1={redaction}", message)
