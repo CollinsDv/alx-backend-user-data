@@ -22,12 +22,12 @@ class BasicAuth(Auth):
         if authorization_header is None or\
                 not isinstance(authorization_header, str) or\
                 not authorization_header.startswith('Basic '):
-                    return None
+            return None
 
         return authorization_header[6:]
 
     def decode_base64_authorization_header(self,
-            base64_authorization_header: str) -> str:
+                                           base64_authorization_header: str) -> str:
         """decodes base64_authorization_header back to Base64 string
         Args:
             base64_authorization_header: base64 encoded string
@@ -36,15 +36,16 @@ class BasicAuth(Auth):
         """
         if base64_authorization_header is None or\
                 not isinstance(base64_authorization_header, str):
-                    return None
+            return None
 
         try:
-            return base64.b64decode(base64_authorization_header).decode('utf-8')
+            return base64.b64decode(
+                    base64_authorization_header).decode('utf-8')
         except Exception:
             return None
 
     def extract_user_credentials(self,
-            decoded_base64_authorization_header: str) -> (str, str):
+                                 decoded_base64_authorization_header: str) -> (str, str):
         """returns the user email and password from
         the Base64 decoded value.
         Args:
@@ -55,14 +56,15 @@ class BasicAuth(Auth):
         if decoded_base64_authorization_header is None or\
                 not isinstance(decoded_base64_authorization_header, str) or\
                 ':' not in decoded_base64_authorization_header:
-                    return (None, None)
+            return (None, None)
 
         # split the list based on the colon and convert the list
         # to a tuple
         return tuple(decoded_base64_authorization_header.split(':'))
 
     def user_object_from_credentials(self,
-            user_email: str, user_pwd: str) -> TypeVar('User'):
+                                     user_email: str,
+                                     user_pwd: str) -> TypeVar('User'):
         """returns user obj if user_email in storage
         """
         user = User()
@@ -72,7 +74,7 @@ class BasicAuth(Auth):
         if user.count() == 0 or\
                 user_email is None or not isinstance(user_email, str) or\
                 user_pwd is None or not isinstance(user_pwd, str):
-                    return None
+            return None
 
         # search user by email
         user_obj = user.search({'email': user_email})
@@ -86,7 +88,7 @@ class BasicAuth(Auth):
         return None  # incorrect password
 
     def current_user(self,
-            request=None) -> TypeVar('User'):
+                     request=None) -> TypeVar('User'):
         """Retrieve the User instance for a request
         Args:
             request: Flask request object
