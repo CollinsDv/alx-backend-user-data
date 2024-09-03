@@ -27,7 +27,8 @@ class BasicAuth(Auth):
         return authorization_header[6:]
 
     def decode_base64_authorization_header(self,
-                                           base64_authorization_header: str) -> str:
+                                           base64_authorization_header: str
+                                           ) -> str:
         """decodes base64_authorization_header back to Base64 string
         Args:
             base64_authorization_header: base64 encoded string
@@ -45,7 +46,8 @@ class BasicAuth(Auth):
             return None
 
     def extract_user_credentials(self,
-                                 decoded_base64_authorization_header: str) -> (str, str):
+                                 decoded_base64_authorization_header: str
+                                 ) -> (str, str):
         """returns the user email and password from
         the Base64 decoded value.
         Args:
