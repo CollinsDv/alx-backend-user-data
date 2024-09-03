@@ -27,7 +27,7 @@ class Auth:
 
         if path in excluded_paths:
             return False
-        
+
         return True
 
     def authorization_header(self, request=None) -> str:
@@ -47,9 +47,8 @@ class Auth:
         """
         return None
 
-    def user_object_from_credentials(self,
-            user_email: str,
-            user_pwd: str) -> TypeVar('User'):
+    def user_object_from_credentials(self, user_email: str,
+                                     user_pwd: str) -> TypeVar('User'):
         """ returns the User instance based on his email and password.
         Args:
             user_email: email string
