@@ -1,0 +1,3 @@
+.basic_auth_venv
+*pycache*
+*main.py
