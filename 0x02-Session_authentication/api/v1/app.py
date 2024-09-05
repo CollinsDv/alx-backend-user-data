@@ -44,6 +44,7 @@ def before_req():
     """action before every request
     """
     request.current_user = auth.current_user(request)
+    request.cookie = cookie
 
     auth_list = ['/api/v1/status/',
                  '/api/v1/unauthorized/',
@@ -68,4 +69,5 @@ if __name__ == "__main__":
         auth = BasicAuth()
     else:
         auth = SessionAuth()
+    cookie = getenv("SESSION_NAME")
     app.run(host=host, port=port)

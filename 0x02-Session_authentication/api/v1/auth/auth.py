@@ -46,13 +46,13 @@ class Auth:
         request: Flask request object
         """
         return None
-
-    def user_object_from_credentials(self, user_email: str,
-                                     user_pwd: str) -> TypeVar('User'):
-        """ returns the User instance based on his email and password.
-        Args:
-            user_email: email string
-            user_pwd: user password
-        Return:
-            User object
+    
+    def session_cookie(self, request=None):
+        """returns cookie value from a request
         """
+        if request is None:
+            return None
+        
+        cookie = request.cookie  # get cookie name
+
+        return request.cookies.get(cookie)
