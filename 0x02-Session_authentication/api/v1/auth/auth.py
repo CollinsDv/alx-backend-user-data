@@ -50,9 +50,9 @@ class Auth:
     def session_cookie(self, request=None):
         """returns cookie value from a request
         """
+        # cookie = request.cookie  # get cookie name
+
         if request is None:
             return None
-        
-        cookie = request.cookie  # get cookie name
 
-        return request.cookies.get(cookie)
+        return request.cookies.get('_my_session_id')
