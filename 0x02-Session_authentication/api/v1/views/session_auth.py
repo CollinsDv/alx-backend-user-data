@@ -6,6 +6,7 @@ from flask import request, make_response, jsonify
 from api.v1.views import app_views, User
 from os import getenv
 
+
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def sesh_auth():
     """Handles all routes for the Session authentication"""
@@ -20,7 +21,8 @@ def sesh_auth():
     users = User.search({'email': user_email})
     print(users)
     if len(users) == 0:
-        return make_response(jsonify({'error': 'no user found with this email'}), 404)
+        return make_response(jsonify(
+            {'error': 'no user found with this email'}), 404)
 
     if not users[0].is_valid_password(user_pwd):
         return make_response(jsonify({'error': 'wrong password'}), 401)
@@ -38,7 +40,8 @@ def sesh_auth():
     return res
 
 
-@app_views.route('auth_session/logout', methods=['DELETE'], strict_slashes=False)
+@app_views.route('auth_session/logout',
+                 methods=['DELETE'], strict_slashes=False)
 def logout():
     """logout a deletes a session
     """
