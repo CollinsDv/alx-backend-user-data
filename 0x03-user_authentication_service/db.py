@@ -64,3 +64,24 @@ class DB:
             raise InvalidRequestError
 
         return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """updates users
+        Args:
+            user_id: id
+            kwargs: other items to update with
+        """
+        current_sesh = self._session
+
+        try:
+            user = self.find_user_by(id=user_id)
+            
+            for key, value in kwargs.items():
+                if not hasattr(user, key):
+                    raise ValueError
+                setattr(user, key, value)
+
+            current_sesh.commit()
+        except Exception as e:
+            current_sesh.rollback()
+            raise e
