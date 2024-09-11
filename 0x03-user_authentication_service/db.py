@@ -29,13 +29,18 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, hashed_password: str) -> None:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """adds users to database
         """
         user = User(email=email, hashed_password=hashed_password)
 
-        sesh = self._session
-        sesh.add(user)
-        sesh.commit()
+        current_sesh = self._session
 
-        return user
+        try:
+            current_sesh.add(user)
+            current_sesh.commit()
+        except Exception:
+            current_sesh.rollback()
+            user = None
+        finally:
+            return user
