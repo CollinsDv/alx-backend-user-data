@@ -2,8 +2,8 @@
 """password hashing
 """
 import bcrypt
-import hashlib
 from db import DB
+import uuid
 from user import User
 
 
@@ -45,15 +45,38 @@ class Auth:
 
     def valid_login(self, email: str, password: str) -> bool:
         """validates a user
-		Args:
+        Args:
             email: The user's email.
             password: The user's plaintext password.
-        
+
         Returns:
             bool: True if login is valid, False otherwise.
         """
         user = self._db.find_user_by(email=email)
         if user is None:
             return False
-        
+
         return bcrypt.checkpw(password.encode(), user.hashed_password)
+
+    def _generate_uuid(self):
+        """generates unique id
+        """
+        return str(uuid.uuid4())
+
+    def create_session(self, email: str) -> str:
+        """creates a session id
+        Args:
+            email: email id
+        Returns:
+            session id related to the user
+        """
+        user = self._db.find_user_by(email=email)
+
+        if user:
+            session_id = self._generate_uuid()
+            user.session_id = session_id
+            self._db._session.commit()
+
+            return session
+
+        return None
