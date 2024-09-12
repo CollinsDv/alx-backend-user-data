@@ -75,13 +75,15 @@ class Auth:
         Returns:
             session id related to the user
         """
-        user = self._db.find_user_by(email=email)
-
-        if user:
+        try:
+            user = self._db.find_user_by(email=email)
+        except Exception:
+            pass
+        else:
             session_id = self._generate_uuid()
             user.session_id = session_id
             self._db._session.commit()
 
-            return session
+            return session_id
 
         return None
