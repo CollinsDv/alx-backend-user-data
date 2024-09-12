@@ -57,8 +57,6 @@ class DB:
         current_sesh = self._session
         try:
             user = current_sesh.query(User).filter_by(**kwargs).first()
-            if user is None:
-                raise NoResultFound
         except NoResultFound:
             raise NoResultFound
         except Exception as e:
