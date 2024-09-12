@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """SQLAlchemy model implementation
 """
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 
-Base = __import__('base').Base
+Base = declarative_base()
 
 
 class User(Base):
