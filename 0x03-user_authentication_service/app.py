@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Basic flask app
 """
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from auth import Auth
 
 AUTH = Auth()
@@ -16,18 +16,20 @@ def index():
 
 
 @app.route('/users', strict_slashes=False, methods=["POST"])
-def users(email: str, password: str):
+def users():
     """registers users and uses auth proxy
     Args:
         email: user email
         password: user password
     """
+    email = request.form.get('email')
+    password = request.form.get('password')
     try:
         AUTH.register_user(email, password)
-    catch ValueError:
+    except ValueError:
         return jsonify({"message": "email already registered"}), 400
     else:
-        return jsonify({f"email": {email}, "message": "user created"})
+        return jsonify({"email": email, "message": "user created"})
 
 
 if __name__ == '__main__':
