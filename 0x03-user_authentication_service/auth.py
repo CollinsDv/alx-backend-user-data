@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""password hashing function
+"""password hashing
 """
 import bcrypt
-import base64
 import hashlib
 
 
@@ -14,7 +13,6 @@ def _hash_password(password: str) -> bytes:
         bytes sized irreversible hash value
     """
     return bcrypt.hashpw(
-            base64.b64encode(
-                hashlib.sha256(password.encode()).digest()),
-                bcrypt.gensalt()
+            hashlib.sha256(password.encode()).digest(),
+            bcrypt.gensalt()
             )
