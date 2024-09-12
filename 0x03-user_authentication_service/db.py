@@ -54,16 +54,16 @@ class DB:
         Args:
             kwargs: set of values to query
         """
-        if not kwargs:
-            raise InvalidRequestError
-
         current_sesh = self._session
+
         try:
             user = current_sesh.query(User).filter_by(**kwargs).first()
             if user is None:
                 raise NoResultFound
         except NoResultFound:
             raise NoResultFound
+        except InvalidRequestError:
+            raise InvalidRequestError
 
         return user
 
