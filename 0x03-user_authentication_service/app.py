@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Basic flask app
 """
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response, abort
 from auth import Auth
 
 AUTH = Auth()
@@ -18,9 +18,6 @@ def index():
 @app.route('/users', strict_slashes=False, methods=["POST"])
 def users():
     """registers users and uses auth proxy
-    Args:
-        email: user email
-        password: user password
     """
     email = request.form.get('email')
     password = request.form.get('password')
@@ -30,6 +27,24 @@ def users():
         return jsonify({"message": "email already registered"}), 400
     else:
         return jsonify({"email": email, "message": "user created"})
+
+
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
+def sessions():
+    """creates sessions
+    """
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if not valid_login(email, password):
+        abort(401)
+
+    sesh_id = AUTH.create_session(email)
+
+    response = jsonify({"email": email, "message": "logged in"})
+    response.set_cookie('session_id', sesh_id)
+
+    return response
 
 
 if __name__ == '__main__':
