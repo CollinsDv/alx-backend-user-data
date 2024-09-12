@@ -15,7 +15,7 @@ def _hash_password(password: str) -> bytes:
         bytes sized irreversible hash value
     """
     return bcrypt.hashpw(
-            hashlib.sha256(password.encode()).digest(),
+            password.encode(),
             bcrypt.gensalt()
             )
 
@@ -36,9 +36,24 @@ class Auth:
             user object or raise valueerror
         """
         # check if user exists
-        if self._db._session.query(User).filter_by(email=email).first():
+        if self._db.find_user_by(email=email):
             raise ValueError(f"User {email} already exists")
 
         hashed_pwd = _hash_password(password)
 
         return self._db.add_user(email, hashed_pwd)
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """validates a user
+		Args:
+            email: The user's email.
+            password: The user's plaintext password.
+        
+        Returns:
+            bool: True if login is valid, False otherwise.
+        """
+        user = self._db.find_user_by(email=email)
+        if user is None:
+            return False
+        
+        return bcrypt.checkpw(password.encode(), user.hashed_password)
